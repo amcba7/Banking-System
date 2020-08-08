@@ -11,8 +11,10 @@ class Profile extends JFrame {
     JButton transfer = new JButton("Transfer Money");
     JButton history = new JButton("Transation History");
     private String nameData,genderData,passwordData;
-    private int balenceData,depositeData,transferData,historyData;
+    private int balenceData,depositeData,transferAmmount,historyData;
     private int accNo;
+    JTextField transferMoney = new JTextField(10);
+    JTextField transfer_AccNo = new JTextField(10);
     Profile() {
 	profileFrame();
     }
@@ -128,9 +130,70 @@ class Profile extends JFrame {
             }
         });
     }
+    private JPanel transferAccNo() {
+        JPanel panel = new JPanel(new FlowLayout());
+        JLabel label = new JLabel("Account number : ");
+        
+        panel.add(label);
+        panel.add(transfer_AccNo);
+        return panel;
+    }
+    private JPanel transferMoney() {
+        JPanel panel = new JPanel(new FlowLayout());
+        JLabel label = new JLabel("Ammount : ");
+        
+        panel.add(label);
+        panel.add(transferMoney);
+        return panel;
+    }
+    private JPanel panel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
+        panel.add(transferAccNo());
+        panel.add(transferMoney());
+        
+        return panel;
+    }
+    private void transferAction() {
+        transfer.addActionListener(ae-> {
+            try {
+                int msg = JOptionPane.showConfirmDialog(this,panel());
+                int number = Integer.parseInt(transfer_AccNo.getText());
+                if (msg == JOptionPane.YES_OPTION) {
+                    if (number == l.a) {
+                        JOptionPane.showMessageDialog(this,"change account number");
+                    } else {
+                        
+                        transferAmmount = Integer.parseInt(transferMoney.getText());
+                        if (transferAmmount > balenceData) {
+                            JOptionPane.showMessageDialog(this,"insufficient balance");
+                        } else {
+                            
+                            String q ="update UserInfo set Deposite = '"+transferAmmount+"' where AccountNumber='"+number+"' ";
+                            connect.s.executeUpdate(q);
+                            String q1 = "select * from UserInfo where AccountNumber='"+number+"'";
+                            ResultSet rs = connect.s.executeQuery(q1);
+                            int friendBalence = rs.getInt("Balence");
+                            friendBalence = friendBalence + transferAmmount;
+                            String q2 ="update UserInfo set Balence = '"+friendBalence+"' where AccountNumber='"+number+"' ";
+                            connect.s.executeUpdate(q2);
+                            balenceData = balenceData - transferAmmount;
+                            String q3 ="update UserInfo set Balence = '"+balenceData+"' where AccountNumber='"+l.a+"' ";
+                            connect.s.executeUpdate(q3);
+                            JOptionPane.showMessageDialog(this,"Money Transfer successfully");
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+                JOptionPane.showMessageDialog(this,"invalid input");
+            }
+        });
+    }
     private void actionListener() {
         checkBalence();
         depositeAction();
         withdrawAction();
+        transferAction();
     }
 }
