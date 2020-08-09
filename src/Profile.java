@@ -9,7 +9,7 @@ class Profile extends JFrame {
     JButton deposite = new JButton("Deposite");
     JButton withdraw = new JButton("Withdraw");
     JButton transfer = new JButton("Transfer Money");
-    JButton history = new JButton("Transation History");
+    JButton logout = new JButton("Logout");
     private String nameData,genderData,passwordData;
     private int balenceData,depositeData,transferAmmount,historyData;
     private int accNo;
@@ -24,8 +24,8 @@ class Profile extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
         setTitle("Banking System");
-        setSize(500,500);
         add(profilePanel());
+        setExtendedState(MAXIMIZED_BOTH);
     }
     private JPanel heading() {
         
@@ -74,7 +74,7 @@ class Profile extends JFrame {
         profileButton.add(deposite);
         profileButton.add(withdraw);
         profileButton.add(transfer);
-        profileButton.add(history);
+        profileButton.add(logout);
         return profileButton;
     }
     private JPanel profilePanel() {
@@ -190,10 +190,17 @@ class Profile extends JFrame {
             }
         });
     }
+    private void logout() {
+        logout.addActionListener(ae->{
+           new LogIn();
+           this.dispose();
+        });
+    }
     private void actionListener() {
         checkBalence();
         depositeAction();
         withdrawAction();
         transferAction();
+        logout();
     }
 }
