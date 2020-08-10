@@ -183,9 +183,17 @@ class Profile extends JFrame {
                             JOptionPane.showMessageDialog(this,"Money Transfer successfully");
                         }
                     }
+                    if (msg==JOptionPane.CANCEL_OPTION) {
+                        this.dispose();
+                    }
+                    if (msg==JOptionPane.NO_OPTION) {
+                        new Profile();
+                    }
                 }
-            } catch (Exception e) {
+            } catch (NumberFormatException e) {
                 System.out.println(e);
+                JOptionPane.showMessageDialog(this,"invalid input");
+            } catch (Exception e) {
                 JOptionPane.showMessageDialog(this,"invalid input");
             }
         });

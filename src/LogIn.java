@@ -13,6 +13,8 @@ class LogIn extends JFrame {
 	JButton forgetPassword = new JButton("Forget Password");
         public static String b;
         public static int a;
+        JTextField forgetAccNo = new JTextField(10);
+        JPasswordField newPassword = new JPasswordField(10);
         LogIn(int a) {};
 	LogIn() {
 		loginFrame();
@@ -82,8 +84,50 @@ class LogIn extends JFrame {
             }
             });
         }
+        private void forgetPassword() {
+            forgetPassword.addActionListener(ae->{
+               try {
+                   int msg = JOptionPane.showConfirmDialog(this,panel());
+                   int number = Integer.parseInt(forgetAccNo.getText());
+                   String pass = newPassword.getText();
+                   if (msg == JOptionPane.YES_OPTION) {
+                       
+                       String q ="update UserInfo set Password = '"+pass+"' where AccountNumber='"+number+"' ";
+                       connect.s.executeUpdate(q);
+                       JOptionPane.showMessageDialog(this,"Password changed");
+                   }
+               } catch(Exception e) {
+                   JOptionPane.showMessageDialog(this,"invalid input");
+               }
+            });
+        }
+        
+        private JPanel forgetAccNo() {
+            JPanel panel = new JPanel(new FlowLayout());
+            JLabel label = new JLabel("Account number : ");
+            panel.add(label);
+            panel.add(forgetAccNo);
+            return panel;
+        }
+        private JPanel newPassword() {
+            JPanel panel = new JPanel(new FlowLayout());
+            JLabel label = new JLabel("new Password : ");
+            panel.add(label);
+            panel.add(newPassword);
+            return panel;
+        }
+        private JPanel panel() {
+            
+            JPanel panel = new JPanel();
+            panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
+            panel.add(forgetAccNo());
+            panel.add(newPassword());
+            
+            return panel;
+        }
 	private void actionListener() {
 		registerAction();
                 logInAction();
+                forgetPassword();
 	}
 }
